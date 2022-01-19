@@ -1,65 +1,68 @@
+; REFERENCE: https://stackoverflow.com/questions/43031677/assembler-code-for-determining-if-a-number-is-prime-or-not/
+
 .MODEL SMALL
 
 .stack 100H
 
-.DATA                                                   ; Khu vuc tao bien
+.DATA                                                   ; the data section contains anything that we want to be automatically
+                                                        ; initialized by the system before it calls the entry point of the program.
 
-    VAL1    DB  ?                                       ; Tao bien Byte (chua 1 byte), VAL1 la 1 bien, "?" nghia la bien do chua duoc khoi tao.
-    NL1     DB  0AH,0DH, 'XIN MOI NHAP SO: ','$'        ; in ra man hinh, $ nghia la dang o dia chi hien tai dua theo chuong trinh assembly.
-    NL2     DB  0AH,0DH, 'KHONG PHAI SO NGUYEN TO','$'  ; in ra man hinh, $ nghia la dang o dia chi hien tai dua theo chuong trinh assembly.
-    NL3     DB  0AH,0DH, 'LA SO NGUYEN TO','$'          ; in ra man hinh, $ nghia la dang o dia chi hien tai dua theo chuong trinh assembly.
+    VAL1    DB  ?                                       ; Define Byte (the size is 1 byte), VAL1 is a variable, "?" means that the values are not initialized.
+    NL1     DB  0AH,0DH, 'ENTER NO: ','$'               ; prints the text, $ means the current address according to the assembler.
+    NL2     DB  0AH,0DH, 'IT IS NOT PRIME','$'          ; prints the text, $ means the current address according to the assembler.
+    NL3     DB  0AH,0DH, 'IT IS PRIME','$'              ; prints the text, $ means the current address according to the assembler.
 
-    .CODE                                               ; Bat dau code.
+    .CODE                                               ; start coding.
 
 MAIN:
 
-    MOV AX,@DATA                                        ; DATA la khu vuc bien o tren, di chuyen DATA den AX.
-    MOV DS,AX                                           ; di chuyen AX den DS, AX duoc goi la khu vuc khoi tao bien va tat ca bien trong khu vuc duoc su dung toi.
+    MOV AX,@DATA                                        ; DATA is the name of the Data Segment, we declare our variables in a segment, move DATA to AX.
+    MOV DS,AX                                           ; move AX to DS, AX is called Initialization of Data Segment and it makes all the variables in Data Segment accessible.
 
-    LEA DX,NL1                                          ; di chuyen NL1 nhan data vao DX.
-    MOV AH,09H                                          ; di chuyen chuoi the vao AH.
-    INT 21H                                             ; nhap va xuat bi ngung de nhap vao, chung duoc tim thay o DOS Interrupt.
+    LEA DX,NL1                                          ; move NL1 label's data into DX.
+    MOV AH,09H                                          ; move the string into AH.
+    INT 21H                                             ; standard input and output interrupts are found in the DOS Interrupt.
 
-    MOV AH,01H                                          ; doc ki tu va di chuyen vao AH.
-    INT 21H                                             ; nhap va xuat bi ngung de nhap vao, chung duoc tim thay o DOS Interrupt.
-    SUB AL,30H                                          ; tru di 30H tu gia tri nhap vao.
-    MOV VAL1,AL                                         ; luu ket qua vao nhan VAL1.
+    MOV AH,01H                                          ; read a character and move into AH.
+    INT 21H                                             ; standard input and output interrupts are found in the DOS Interrupt.
+    SUB AL,30H                                          ; subtract 30H from the input value.
+    MOV VAL1,AL                                         ; save the result into VAL1 label.
 
-    MOV AH,00                                           ; xoa AH.
+    MOV AH,00                                           ; clear AH.
 
-    MOV CL,2                                            ; CL su dung de tranh truong hop lap vo tan.
-    DIV CL                                              ; chia ket qua cho CL va luu gia tri so thuong cua ket qua vao CL va so du vao CH.
+    MOV CL,2                                            ; CL usually used to for loop counters.
+    DIV CL                                              ; divides the value by CL and keeps the result's quotient in CL and remainder in CH.
     MOV CL,AL                                           ; move AL to CL.
 
 LBL1:
 
-    CMP CL,1                                            ; so sanh neu gia tri cua CL la 1.
-    JBE LBL3                                            ; nhay neu CL = 1 hoac CL = 0.
+    CMP CL,1                                            ; compare if the CL value is 1.
+    JBE LBL3                                            ; Jump if CL=1 or CL=0.
 
-    MOV AH,00                                           ; xoa AH.
-    MOV AL,VAL1                                         ; di chuyen gia tri trong VAL1 den AL.
-    DIV CL                                              ; chia vong lap.
-    CMP AH,00                                           ; kiem tra neu AH la 0.
-    JZ LBL2                                             ; (nhay neu bang 0) neu gia tri la CMP thi tra ve false, nhay den LBL2, khong thi tiep tuc.
-    DEC CL                                              ; tru gia tri di cho 1.
-    JMP LBL1             
+    MOV AH,00                                           ; clear AH.
+    MOV AL,VAL1                                         ; move the value in VAL1 to AL.
+    DIV CL                                              ; divides the loop.
+    CMP AH,00                                           ; check if AH is 0.
+    JZ LBL2                                             ; (Jump if Zero) if CMP returns false, jump to LBL2, else continue.
+    DEC CL                                              ; decrea8se the value by 1.
+    JMP LBL1                                            ; jump to LBL1.
 
 LBL2:
 
-    MOV AH,09H                                          ; di chuyen chuoi den AH.
-    LEA DX,NL2                                          ; bang voi - MOV DX, offset NL2.
-    INT 21H                                             ; nhap va xuat bi ngung de nhap vao, chung duoc tim thay o DOS Interrupt.
-    JMP EXIT                                            ; nhay den nhan EXIT.
+    MOV AH,09H                                          ; move the string to AH.
+    LEA DX,NL2                                          ; equals to - MOV DX, offset NL2.
+    INT 21H                                             ; standard input and output interrupts are found in the DOS Interrupt.
+    JMP EXIT                                            ; jump to EXIT label.
 
 LBL3:
 
-    MOV AH,09H                                          ; di chuyen chuoi den AH.
-    LEA DX,NL3                                          ; bang voi - MOV DX, offset NL3.
-    INT 21H                                             ; nhap va xuat bi ngung de nhap vao, chung duoc tim thay o DOS Interrupt.
+    MOV AH,09H                                          ; move the string to AH.
+    LEA DX,NL3                                          ; equals to - MOV DX, offset NL3.
+    INT 21H                                             ; standard input and output interrupts are found in the DOS Interrupt.
 
 EXIT:
 
-    MOV AH,4CH                                          ; thoat khoi chuong trinh
-    INT 21H                                             ; nhap va xuat bi ngung de nhap vao, chung duoc tim thay o DOS Interrupt.
+    MOV AH,4CH                                          ; exit from the program.
+    INT 21H                                             ; standard input and output interrupts are found in the DOS Interrupt.
 
-    END MAIN                                            ; cau lenh ngung code trong khu vuc code
+    END MAIN                                            ; the ending point of the code written in code segment.
