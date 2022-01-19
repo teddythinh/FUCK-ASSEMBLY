@@ -3,7 +3,7 @@
 .data
 checkCount db ?
 tmp db ?
-in db "Xin moi ban nhap: $"
+in db "Please input: $"
 .code
 main proc
     mov ax,@data
