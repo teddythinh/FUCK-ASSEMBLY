@@ -3,9 +3,9 @@ Code Segment
 Assume cs: Code
 Org 100h
 Start:
-@write ?Nhap so n = ?
-Call nhap_so
-@xuongdong
+@write ?Input n = ?
+Call input
+@endline
 mov cx,ax
 mov bx,1
 lap: mov ax,bx
@@ -14,12 +14,10 @@ inc bx
 cmp ax,cx
 jb lap
 je cp
-@write ?Ko phai so chinh
-phuong?
+@write ?Not a square number?
 jmp thoat
-cp: @write ?So da nhap la so
-chinh phuong?
-thoat:
+cp: @write ?The input is a square number?
+out:
 int 20h
 include proc.asm
 Code Ends
