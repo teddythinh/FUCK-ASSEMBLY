@@ -1,10 +1,10 @@
 # MY FUCKING ASSEMBLY LANGUAGE 
 
 ## Introduction:
-This repo is some of my homework exercises. Please don't touch if you don't understand. (Neither do I 😭😭😭)  
-I am no longer contribute to this repo because I do not use assembly language for any further reason.
+This repository contains some of my homework assignments. If you don't understand, please don't touch. (I don't either 😭😭😭.)
+Because I no longer use assembly language for any further reason, I am no longer contributing to this repository.
 
-**NOTE: I'm not sure that my program runs properly, maybe there are some logical bugs, please feel free to contact me or open issues to fix these bugs. Thank you very much !**
+**NOTE: I'm not sure whether my program is working properly, perhaps there are a few logical bugs, please feel free to contact me or open issues to fix these bugs. Thank you so much!**
 
 PLEASE GIVE MY CREDIT OR MENTION ME `@teddythinh` WHEN USING. THANKS !☺️☺️☺️
 
